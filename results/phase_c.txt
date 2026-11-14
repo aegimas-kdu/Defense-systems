@@ -1,0 +1,23 @@
+method	scenario	mission_success	calls_per_mission	honest_agents_quarantined	clean_tools_quarantined	liar_quarantined
+
+D1 answer vote	S0	0.997500	12.000000	0.000000	0.000000	n/a
+D1b reading vote	S0	1.000000	12.000000	0.000000	0.000000	n/a
+D4 base	S0	1.000000	12.000000	0.000000	0.000000	n/a
+
+D1 answer vote	S1	0.965111	12.000000	0.000000	0.000000	0/120
+D1b reading vote	S1	0.999611	12.000000	0.000000	0.000000	0/120
+D4 base	S1	0.999667	12.000000	0.000000	0.000000	120/120
+
+D1 answer vote	S2s	0.990333	12.000000	0.000000	0.000000	n/a
+D1b reading vote	S2s	0.999500	12.000000	0.000000	0.000000	n/a
+D4 base	S2s	0.999667	12.000000	0.000000	0.000000	n/a
+
+D1 answer vote	S2a	0.992000	12.000000	0.000000	0.000000	n/a
+D1b reading vote	S2a	0.999333	12.000000	0.000000	0.000000	n/a
+D4 base	S2a	0.999833	12.000000	0.000000	0.000000	n/a
+
+D1 answer vote	S3	0.918639	12.000000	0.000000	0.000000	0/120
+D1b reading vote	S3	0.982528	12.000000	0.000000	0.000000	0/120
+D4 base	S3	0.982806	12.000000	0.000000	0.075000	120/120
+
+Phase C compares D1, D1b and D4-Base across the five core scenarios. The liar-quarantine column records the number of liar runs caught over all liar-bearing runs for that scenario.

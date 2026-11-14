@@ -1,0 +1,13 @@
+method	scenario	mission_success	calls_per_mission	honest_agents_quarantined	clean_tools_quarantined
+D1 answer vote	S0	0.997500	12.000000	0.000000	0.000000
+D1b reading vote	S0	1.000000	12.000000	0.000000	0.000000
+D1 answer vote	S1	0.965111	12.000000	0.000000	0.000000
+D1b reading vote	S1	0.999611	12.000000	0.000000	0.000000
+D1 answer vote	S2s	0.990333	12.000000	0.000000	0.000000
+D1b reading vote	S2s	0.999500	12.000000	0.000000	0.000000
+D1 answer vote	S2a	0.992000	12.000000	0.000000	0.000000
+D1b reading vote	S2a	0.999333	12.000000	0.000000	0.000000
+D1 answer vote	S3	0.918639	12.000000	0.000000	0.000000
+D1b reading vote	S3	0.982528	12.000000	0.000000	0.000000
+
+In S0, both baselines are essentially perfect, with D1b reaching 1.000 and nothing falling below that baseline. The calls-per-mission value is exactly 12 for both methods, which matches the expected cost of 2 questions times 3 agents times 2 readings. D1b consistently outperforms D1 in the harder scenarios, with the biggest gap in S3 where D1 drops to about 0.919 while D1b stays near 0.983. Overall, reading-level voting is more robust under poisoning and liar noise, while both baselines keep the expected per-mission cost fixed.

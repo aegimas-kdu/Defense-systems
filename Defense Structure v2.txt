@@ -1,0 +1,124 @@
+Defense Structure v2
+Project: Trust-Ledgered Resilience of Multi-Agent AI Systems Against Combined Byzantine and Tool-Poisoning Attacks
+Owner: Precieuse (Defense Dev). This document describes how the defenses themselves are built: their layers, their parts, how the four methods relate to each other, what each one remembers, and how a question flows through each. It is the architecture view. Defense Design v2 explains the ideas and the evidence, Defense Roadmap v3 gives the build order, and the Defense Build Walkthrough guides the code. The system the defenses run in is described in Defense System Structure v2.
+1. The defenses we build
+The team voted for three defenses. I add one required baseline and one optional one:
+• D1, majority vote. The most common agent answer wins. No memory. (Voted.)
+• D1b, reading vote. The most common value among all readings wins. No memory. (Added: a strong simple baseline, because a vote over answers ignores the backup readings.)
+• D4-Base, trust ledger with quarantine. Votes over readings, learns from agreement, blames agents and tools, and quarantines the ones that are clearly bad. (Voted.)
+• D4+, provenance-aware adaptive trust ledger. D4-Base plus cascade revision, fact-level quarantine, a trust-guided fast path, and recovery. (Voted.)
+• D1c, adaptive without trust (optional). A random agent first, others only if its two readings disagree. It separates what trust adds from what adaptive querying adds.
+2. The five layers
+Every defense is built from the same layers. A simple defense uses only the first one. D4+ uses all five.
+  Coordinator / Evaluator
+      |  ask(agent_ids) returns claims        decide(...) returns a decision
+      v
+  +--------------------- Defense ---------------------+
+  | 4  POLICY   (per defense)    defense.py, baselines.py |   D1, D1b, D4-Base, D4+
+  | 3  MEMORY   (has state)      trust.py                 |   counters, trust, quarantine, flags, probation
+  | 2  BLAME    (no state)       blame.py                 |   who is at fault on one question
+  | 1  EVIDENCE (no state)       defense.py               |   votes, plurality, tie-break, decision format
+  +-------------------------------------------------------+
+  | 5  LEDGER   (record only)    fake_ledger.py / real    |   one entry per reading, two outcomes
+  +-------------------------------------------------------+
+• Layer 1, Evidence (no state). Turns claims into votes, picks the winner with plurality, breaks ties with a seeded random choice shared by all defenses, and builds the decision dictionary.
+• Layer 2, Blame (no state). Pure functions. Given the claims of one question and a verdict, they say which agents and tools were right or wrong, following the written blame rule. No memory, so every case can be tested by hand.
+• Layer 3, Memory (has state). The counters, the trust scores, the quarantine sets, the fact and slice flags, and the probation streaks. It only changes when the policy tells it to record evidence.
+• Layer 4, Policy (differs per defense). Decides whom to ask, how to vote, when to learn, and what to return. This is the only layer where D1, D1b, D4-Base and D4+ differ.
+• Layer 5, Ledger (record). Written by the policy: one entry per reading, with the parent decision ids and two outcomes. It is the audit trail. It does not make decisions.
+The rule that keeps the comparison fair: the layers below the policy are shared. D4+ is D4-Base with extra switches, not a separate program. That is what makes the ablations clean.
+3. What each method uses
+D1D1bD4-BaseD4+Evidence voted onagent answersall readingsusable readingsusable readings (fast path may use 2)Learns from agreementnonoyes, right awayyes, at the end of the missionBlame rulenonoyesyes, with excused toolsAgent quarantinenonoyesyes, with recoveryTool handlingnonenonewhole-tool quarantine(tool, key) and (tool, slice) flagsCascade revisionnononoyesFast pathnononoyesTool calls per mission121212fewerWrites the ledgernonoyesyes4. Classes and files
+Defense                      (defense.py)   base class: settings, tie-break dice, default functions
+  |-- MajorityVote           (baselines.py) D1
+  |-- ReadingVote            (baselines.py) D1b
+  |-- D4Base                 (defense.py)   evidence + blame + memory + ledger
+         |-- D4Plus          (defense.py)   adds the mechanisms, each behind a switch
+• Defense: decide, end_mission, learn_audit, get_trust, is_quarantined, report. The base versions do nothing, so a stateless defense only writes decide.
+• D4Base: owns a TrustMemory, a ledger and the rule from blame.py. Learns inside decide.
+• D4Plus changes four things and nothing else:
+a. decide: adds the fast path and the cascade check.
+b. end_mission: learns here, so a revision can correct an earlier decision first.
+c. Memory: adds flags and probation.
+d. The blame call: passes the excused tools after a revision.
+• Switches (all in the settings file): use_cascade_revision, use_fact_quarantine, use_fast_path. With all three off, D4+ must behave like D4-Base, apart from when it learns. That is a test.
+5. How a question flows through each defense
+D1. Ask all agents of the domain. Vote over their answers. Pick the winner, with a seeded random tie-break. Return the decision.
+D1b. The same, but vote over all readings (up to 6 votes per question).
+D4-Base.
+1. Ask all agents.
+2. Count the readings of agents and tools that are not quarantined. If none are left, count all readings.
+3. Pick the winner with plurality. Build the decision.
+4. Write one ledger entry per reading.
+5. If the winner has at least support_needed readings (3), compute the evidence with the blame rule, record it in memory (which may quarantine someone), and set agreed_with_verdict in the ledger.
+6. Return the decision.
+D4+ (per question).
+1. Fast path (switch). Pick the most trusted agent that is not quarantined and whose two tools are usable on this key. If its trust is at least trust_fast_path, ask only that agent.
+o If its two readings agree, accept the value (2 tool calls) and count it as a good observation.
+o Otherwise escalate: ask the remaining agents.
+2. Full path. Count the usable readings (not quarantined, and not flagged for this tool and key or slice). Pick the winner. If nothing is usable, fall back to all readings.
+3. Cascade check (switch, questions that have a parent). If the independent route agrees on a value that implies a different parent value, that value is one of the parent's earlier candidates, and its support (candidate support plus the independent readings) beats the chosen parent's support, then set revised_parent and use the revised value.
+4. Write the ledger entries, including the parent decision ids.
+5. Learning waits. Nothing is learned until end_mission.
+6. At end_mission, for each decision in order: the verdict is the revised value if there was a revision, else the decided value. If the decision was revised, excuse the readings the bad input explains. Learn only if the decision had enough support or was revised. Record the evidence, set the flags, update the probation streaks, and set the ledger outcomes.
+6. What each method remembers
+• D1 and D1b: nothing. The tie-break dice are the only state.
+• D4-Base: counters of observations and bad or wrong observations for every agent and every tool, the two quarantine sets, and the ledger.
+• D4+: everything D4-Base keeps, plus: the flagged (tool, key) pairs, the flagged (tool, slice) pairs, the probation streak of each quarantined entity, and the decisions of the current mission waiting to be learned.
+All state is created fresh for every run, so nothing leaks from one run to the next.
+7. The mechanisms of D4+
+Mechanism 1: cascade revision and conditional blame (switch use_cascade_revision)
+• Input: a decision with a parent decision, the parent's candidates and their support.
+• Rule: revise the parent when the independent route supports a different earlier candidate better than the chosen one.
+• Output: revised_parent, a corrected final value, and the excused tools for learning.
+• Conditional only: a downstream reading is excused only if it equals the value the formula gives from the bad input. Any other wrong reading still counts, so a liar cannot hide behind a bad parent.
+• Today it applies to one pair: distance, then time.
+Mechanism 2: fact-level and slice-level flags (switch use_fact_quarantine)
+• Input: a tool with an agreed-upon wrong value on a key.
+• Rule: flag (tool, key). When slice_flag_after different keys of one warehouse are flagged for a tool, flag (tool, warehouse).
+• Output: a tool-and-key check, usable_tool(tool, key), used when counting votes.
+• No whole-tool quarantine, so a tool stays usable on its clean facts.
+Mechanism 3: trust-guided fast path (switch use_fast_path)
+• Input: the trust of each agent and the usability of its tools on this key.
+• Rule: ask the most trusted agent first and accept if its two readings agree.
+• Output: fewer tool calls, with escalation when anything looks wrong.
+• Trade-off: less redundancy, so a new fault is detected later. Report calls against accuracy.
+Recovery
+• A quarantined agent or tool is still observed. When it has n_probation observations in a row that are good by the verdict, it is released, and its counters are reset, so its old record does not put it straight back.
+• To be observed, quarantined agents must still appear in the escalated reads, without a vote.
+• A tool that is only partly poisoned can pass a short streak by luck (flapping). A longer streak is safer. Measure it.
+8. Interfaces between the layers
+• Evidence: plurality(votes, rng) returns (value, support, tied). make_decision(...) returns the decision dictionary.
+• Blame: tool_agreed_values(claims), is_right(reading, verdict, excused), and question_evidence(claims, verdict, excused), which returns {'agents': ..., 'tools': ...}.
+• Memory: record(evidence), agent_trust, tool_trust, is_quarantined, quarantined_agents, quarantined_tools. D4+ adds usable_tool(tool, key), flag functions and probation functions.
+• Policy: the Defense functions.
+• Ledger: append(entry), query_decision(decision_id), set_outcome(entry_id, agreed, audit_correct, excused), verify_chain().
+9. Design principles
+1. No ground truth. The defense learns from agreement. The true answer reaches it only on audited questions.
+2. Fair baselines. D1b is strong, and D4-Base is not built to fail.
+3. One change at a time. D4+ is D4-Base plus switches, so each ablation changes one thing.
+4. Rules as pure functions. The blame rule has no memory and is tested with hand-made cases.
+5. Every number in the settings file.
+6. Same randomness for every defense. The generator's noise is fixed in advance, so a defense that asks fewer agents sees the same slips and lies.
+7. Report what happens, with standard errors, whatever the order.
+10. Known weaknesses of this structure
+• Learning from its own verdict. If the chosen value is wrong, the readings that were right are blamed. Audits and the cascade check reduce this. They do not remove it.
+• The blame rule's limits: a liar who lies in only one reading is not caught, and an honest agent wrong in both readings (two bad tools) can be blamed unless both tools agreed.
+• Slice flags help when poison follows a warehouse and waste clean readings when it is scattered. Both must be reported.
+• Quarantine without recovery is permanent. Recovery adds a different risk, flapping.
+• The fast path removes redundancy.
+• Audits are not built yet. Phase E must decide whether an audit re-scores earlier learning or only applies to future decisions.
+11. Where each part is built
+• Layer 5, the ledger stand-in: Step A4.
+• Layer 1, evidence, and the baselines D1 and D1b: Step B5.
+• Layer 2, blame: Step C1.
+• Layer 3, memory: Step C2. Flags and probation: Steps D3 and D4.
+• D4-Base: Step C3.
+• D4+ mechanisms: Steps D1 to D5.
+• The real ledger and the adapter: Step E1.
+12. Open decisions
+• Is D1c built? It costs about 1 hour and sharpens the cost story.
+• Should D4-Base use whole-tool quarantine, as in my prototype, or flags only? Whole-tool quarantine is the more standard base, and it makes the cascade damage visible.
+• The audit rule (Section 10).
+• The generalization of Mechanism 1 to other dependent questions, if the team adds any.
+• Thresholds: min_claims, t_agent, t_tool, trust_fast_path, slice_flag_after, n_probation. They are tuned on development seeds in Step E3.
