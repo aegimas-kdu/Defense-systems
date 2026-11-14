@@ -1,0 +1,11 @@
+{
+  "tool_id": "route_eta_calculator",
+  "domain": "Transportation",
+  "description": "Calculated route time estimates for dispatch planning.",
+  "fallback_value": 140,
+  "records": [
+    {"origin_warehouse": "W1", "destination_hospital": "C2", "vehicle_type": "Truck", "estimated_minutes": 140},
+    {"origin_warehouse": "W2", "destination_hospital": "C2", "vehicle_type": "Truck", "estimated_minutes": 150},
+    {"origin_warehouse": "W3", "destination_hospital": "C2", "vehicle_type": "Truck", "estimated_minutes": 130}
+  ]
+}

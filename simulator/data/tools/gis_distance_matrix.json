@@ -1,0 +1,11 @@
+{
+  "tool_id": "gis_distance_matrix",
+  "domain": "Logistics",
+  "description": "Map-based distance lookup between warehouse and camp locations.",
+  "fallback_value": 100,
+  "records": [
+    {"warehouse_id": "W1", "hospital_id": "C2", "distance_km": 120, "road_type": "mixed"},
+    {"warehouse_id": "W2", "hospital_id": "C2", "distance_km": 90, "road_type": "paved"},
+    {"warehouse_id": "W3", "hospital_id": "C2", "distance_km": 110, "road_type": "mixed"}
+  ]
+}

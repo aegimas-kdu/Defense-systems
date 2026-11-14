@@ -1,0 +1,11 @@
+{
+  "tool_id": "billing_quote_api",
+  "domain": "Logistics",
+  "description": "Quotes the total trip cost paid by the NGO for a route.",
+  "fallback_value": 450,
+  "records": [
+    {"warehouse_id": "W1", "hospital_id": "C2", "vehicle_type": "Truck", "base_dispatch_fee": 75, "total_quoted_cost": 500},
+    {"warehouse_id": "W2", "hospital_id": "C2", "vehicle_type": "Truck", "base_dispatch_fee": 75, "total_quoted_cost": 420},
+    {"warehouse_id": "W3", "hospital_id": "C2", "vehicle_type": "Truck", "base_dispatch_fee": 75, "total_quoted_cost": 480}
+  ]
+}

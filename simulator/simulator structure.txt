@@ -1,0 +1,110 @@
+1. System Description 
+
+System Overview:
+Our system is a simulated Multi-Agent System (MAS) for a humanitarian medical supply chain. It models how a Non-Governmental Organization (NGO) fulfills urgent, free-of-charge medical kit requests for rural clinics and refugee camps under strict time constraints and limited operational funding.
+
+The Workflow:
+1. Aid Request Input: A rural clinic or refugee camp submits an emergency request (e.g., "Deliver 40 units of Kit K1 to Camp C2 within 120 minutes"). While the recipients receive the kits for free, the NGO must verify whether its own operational budget (e.g., 500 units) can cover the transport cost.
+
+2. Task Decomposition: A Coordinator breaks the relief mission into five core operational questions: Warehouse stock availability, Vehicle capacity, Route distance, Travel time, and NGO delivery cost.
+
+3. Domain Execution: Each question is routed to one of three specialized agent groups (Warehouse, Transportation, Logistics), with 3 agents per group. Agents query external data tools to gather the required facts.
+
+4. Adversarial Defense (D4+): Before the Coordinator commits NGO funds or dispatches vehicles, the Defense Module filters out two critical threats:
+	• Byzantine Agents (Compromised Helpers): Malicious agents that intentionally fabricate availability, speed, or cost figures.
+
+	• Poisoned Tools (Corrupted Data Sources): Compromised databases, sensor feeds, or routing APIs that feed false data to honest agents-potentially causing an NGO shipment to fail, exceed its budget, or miss a life-critical delivery window.
+
+5. Plan Generation & Verification: Using the defense-verified facts, the Coordinator builds a feasible dispatch plan (selecting a warehouse with enough stock and a vehicle that meets both the deadline and the NGO's budget). Finally, an Evaluator tests the plan against the ground-truth simulation to verify mission success.
+
+
+
+2. How Tasks Are Divided Between Agents in the Same Domain
+
+Your system has 5 questions and 3 domains (Warehouse, Transportation, Logistics). Here is how those 5 questions map to your 3 domains, and how the 3 agents inside each domain divide the work:
+
+A. Mapping the 5 Questions to Your 3 Domains
+
+1. Warehouse Domain (3 Agents): Answers Question 1 (Stock: How many K1 kits are in each warehouse?).
+2. Transportation Domain (3 Agents): Answers Question 2 & Question 4 (Vehicle Capacity & Delivery Time).
+3. Logistics Domain (3 Agents): Answers Question 3 & Question 5 (Travel Distance & Cost per Trip).
+
+
+
+B. How the 3 Agents Inside One Domain Divide a Task
+
+In a redundancy/defense setup, all 3 agents in a domain receive the exact same question (so you can compare their answers and catch liars). However, to prevent all 3 agents from reading the exact same poisoned tool, each agent is assigned a different "Audit Role" (perspective):
+
+• Example inside the Warehouse Domain (Question: "How many K1 kits are in Warehouse W1?"):
+
+	• Agent W1 (Inventory Clerk): Checks the main digital stock ledger.
+	• Agent W2 (Sensor Monitor): Checks physical shelf weight/IoT sensors.
+• Agent W3 (Dispatch Auditor): Calculates remaining stock by subtracting shipped    orders from initial stock.
+
+Because all 3 agents answer the same question using different angles, an honest majority can expose a lying agent or a poisoned tool.
+
+
+3. Which Tools Each Domain Needs & What They Contain (9 Tools Total)
+
+Each domain has 3 complementary tools that hold connected facts about the same reality. If one tool is poisoned, the math across the other two tools won't add up.
+
+Domain 1: Warehouse Tools (3 Tools)
+
+1. warehouse_inventory_db (Main Ledger)
+• Contains: warehouse_id, kit_type, listed_stock_count (e.g., W1: 50 units of K1).
+2. shelf_iot_sensors (Physical Weight/RFID Feed)
+• Contains: warehouse_id, kit_type, total_shelf_weight_kg, unit_weight_kg (e.g., 250 kg total / 5 kg per kit = 50 units).
+3. inbound_outbound_logs (Movement History)
+• Contains: warehouse_id, kit_type, starting_stock, total_shipped_today (e.g., Started with 70, shipped 20 = 50 left).
+
+
+
+
+
+       Domain 2: Transportation Tools (3 Tools)
+
+1. fleet_specs_catalog (Vehicle Capabilities)
+• Contains: vehicle_type (Van, Truck, Drone), max_kit_capacity, average_speed_kmh.
+2. live_gps_telemetry (Real-Time Speed & Status)
+	• Contains: vehicle_id, current_location, traffic_delay_minutes, active_status, live_speed_kmh, max_payload_kg, kit_unit_weight_kg
+3. route_eta_calculator (Transit Time Estimator)
+• Contains: origin_warehouse, destination_hospital, vehicle_type, estimated_minutes, cargo_bay_volume_m3, kit_box_volume_m3
+
+
+
+       Domain 3: Logistics Tools (3 Tools)
+
+1. gis_distance_matrix (Map & Route Distance)
+	• Contains: warehouse_id, hospital_id, distance_km, road_type, base_rate_per_km.
+
+2. fuel_and_toll_rates (Operating Expense Rates)
+	• Contains: vehicle_type, cost_per_km, highway_toll_fee, expected_fuel_liters, vehicle_km_per_liter, fuel_price_per_liter, expected_fuel_liters, toll_fee.
+3. billing_quote_api (Total Trip Cost Estimator)
+• Contains: warehouse_id, hospital_id, vehicle_type, base_dispatch_fee, total_quoted_cost, billed_mileage_km.
+
+4. How an Agent Picks a Tool
+
+Each agent has a Tool Configuration that maps its job role to a Primary Tool and a Backup Tool.
+
+1. Agent Tool Assignments (Warehouse Example)
+
+Each of the 3 agents in a group is programmed with access to two specific tools-one main source and one cross-check source:
+
+• Agent 1 (Database Specialist): Primary = warehouse_inventory_db | Backup = inbound_outbound_logs
+• Agent 2 (IoT Sensor Specialist): Primary = shelf_iot_sensors | Backup = warehouse_inventory_db
+• Agent 3 (Logistics Auditor): Primary = inbound_outbound_logs | Backup = shelf_iot_sensors
+
+2. Step-by-Step: What Happens During a Task
+
+When the Coordinator sends the question: {"task": "check_stock", "warehouse": "W1", "kit": "K1"}, here is what Agent 1's script executes:
+
+1. Match Task to Tool: Agent 1 checks its internal routing dictionary for "check_stock" and sees its Primary Tool is warehouse_inventory_db.
+
+2. Query Primary Tool: Agent 1 calls the function warehouse_inventory_db.query(warehouse="W1", kit="K1") and gets back 50. (Note: If this tool is poisoned, it might return 500 instead).
+
+3. Optional Cross-Check (Verification Rule): Depending on how strict the agent is programmed to be, it can also query its Backup Tool (inbound_outbound_logs) to see if the two numbers match:
+• If primary_result == backup_result, the agent reports the number with high confidence.
+• If primary_result != backup_result, an honest agent flags a warning (or picks the backup), whereas a Byzantine (lying) agent ignores the mismatch or intentionally fabricates a fake number.
+4. Send Report to Defense: Agent 1 packages its answer, the tool name it used, and its confidence flag into a dictionary (e.g., {"agent": "W_Agent_1", "answer": 50, "source": "warehouse_inventory_db"}) and sends it to Precieuse's Defense module.
+
+

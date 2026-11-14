@@ -1,0 +1,65 @@
+[
+  {
+    "agent_id": "W_Agent_1",
+    "domain": "Warehouse",
+    "role": "Inventory Clerk",
+    "primary_tool": "warehouse_inventory_db",
+    "backup_tool": "inbound_outbound_logs"
+  },
+  {
+    "agent_id": "W_Agent_2",
+    "domain": "Warehouse",
+    "role": "Sensor Monitor",
+    "primary_tool": "shelf_iot_sensors",
+    "backup_tool": "warehouse_inventory_db"
+  },
+  {
+    "agent_id": "W_Agent_3",
+    "domain": "Warehouse",
+    "role": "Dispatch Auditor",
+    "primary_tool": "inbound_outbound_logs",
+    "backup_tool": "shelf_iot_sensors"
+  },
+  {
+    "agent_id": "T_Agent_1",
+    "domain": "Transportation",
+    "role": "Fleet Analyst",
+    "primary_tool": "fleet_specs_catalog",
+    "backup_tool": "route_eta_calculator"
+  },
+  {
+    "agent_id": "T_Agent_2",
+    "domain": "Transportation",
+    "role": "GPS Monitor",
+    "primary_tool": "live_gps_telemetry",
+    "backup_tool": "fleet_specs_catalog"
+  },
+  {
+    "agent_id": "T_Agent_3",
+    "domain": "Transportation",
+    "role": "ETA Auditor",
+    "primary_tool": "route_eta_calculator",
+    "backup_tool": "live_gps_telemetry"
+  },
+  {
+    "agent_id": "L_Agent_1",
+    "domain": "Logistics",
+    "role": "Distance Analyst",
+    "primary_tool": "gis_distance_matrix",
+    "backup_tool": "billing_quote_api"
+  },
+  {
+    "agent_id": "L_Agent_2",
+    "domain": "Logistics",
+    "role": "Cost Analyst",
+    "primary_tool": "fuel_and_toll_rates",
+    "backup_tool": "gis_distance_matrix"
+  },
+  {
+    "agent_id": "L_Agent_3",
+    "domain": "Logistics",
+    "role": "Quote Auditor",
+    "primary_tool": "billing_quote_api",
+    "backup_tool": "fuel_and_toll_rates"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "tool_id": "inbound_outbound_logs",
+  "domain": "Warehouse",
+  "description": "Movement history for stock inflows and shipments.",
+  "fallback_value": 50,
+  "records": [
+    {"warehouse_id": "W1", "kit_type": "K1", "starting_stock": 70, "total_shipped_today": 20, "remaining_stock": 50},
+    {"warehouse_id": "W2", "kit_type": "K1", "starting_stock": 80, "total_shipped_today": 16, "remaining_stock": 64},
+    {"warehouse_id": "W3", "kit_type": "K1", "starting_stock": 60, "total_shipped_today": 20, "remaining_stock": 40}
+  ]
+}
