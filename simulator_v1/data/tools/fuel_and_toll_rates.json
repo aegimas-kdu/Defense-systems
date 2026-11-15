@@ -1,0 +1,11 @@
+{
+  "tool_id": "fuel_and_toll_rates",
+  "domain": "Logistics",
+  "description": "Operational cost assumptions for fuel, tolls, and mileage rates.",
+  "fallback_value": 420,
+  "records": [
+    {"vehicle_type": "Truck", "cost_per_km": 1.1, "highway_toll_fee": 35, "expected_fuel_liters": 18},
+    {"vehicle_type": "Van", "cost_per_km": 0.9, "highway_toll_fee": 20, "expected_fuel_liters": 12},
+    {"vehicle_type": "Drone", "cost_per_km": 1.5, "highway_toll_fee": 0, "expected_fuel_liters": 4}
+  ]
+}

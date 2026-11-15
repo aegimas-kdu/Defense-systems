@@ -1,0 +1,26 @@
+{
+  "tool_id": "gis_distance_matrix",
+  "domain": "Logistics",
+  "description": "Map-based distance lookup between warehouse and camp locations.",
+  "fallback_value": 100,
+  "records": [
+    {"warehouse_id": "W1", "hospital_id": "C1", "distance_km": 120, "road_type": "mixed"},
+    {"warehouse_id": "W1", "hospital_id": "C2", "distance_km": 120, "road_type": "mixed"},
+    {"warehouse_id": "W1", "hospital_id": "C3", "distance_km": 140, "road_type": "mixed"},
+    {"warehouse_id": "W1", "hospital_id": "C4", "distance_km": 130, "road_type": "mixed"},
+    {"warehouse_id": "W1", "hospital_id": "C5", "distance_km": 150, "road_type": "mixed"},
+    {"warehouse_id": "W1", "hospital_id": "C6", "distance_km": 160, "road_type": "mixed"},
+    {"warehouse_id": "W2", "hospital_id": "C1", "distance_km": 90, "road_type": "paved"},
+    {"warehouse_id": "W2", "hospital_id": "C2", "distance_km": 90, "road_type": "paved"},
+    {"warehouse_id": "W2", "hospital_id": "C3", "distance_km": 110, "road_type": "paved"},
+    {"warehouse_id": "W2", "hospital_id": "C4", "distance_km": 100, "road_type": "paved"},
+    {"warehouse_id": "W2", "hospital_id": "C5", "distance_km": 120, "road_type": "paved"},
+    {"warehouse_id": "W2", "hospital_id": "C6", "distance_km": 130, "road_type": "paved"},
+    {"warehouse_id": "W3", "hospital_id": "C1", "distance_km": 110, "road_type": "mixed"},
+    {"warehouse_id": "W3", "hospital_id": "C2", "distance_km": 110, "road_type": "mixed"},
+    {"warehouse_id": "W3", "hospital_id": "C3", "distance_km": 120, "road_type": "mixed"},
+    {"warehouse_id": "W3", "hospital_id": "C4", "distance_km": 115, "road_type": "mixed"},
+    {"warehouse_id": "W3", "hospital_id": "C5", "distance_km": 130, "road_type": "mixed"},
+    {"warehouse_id": "W3", "hospital_id": "C6", "distance_km": 140, "road_type": "mixed"}
+  ]
+}

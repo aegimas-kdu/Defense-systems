@@ -1,11 +1,97 @@
 {
-  "tool_id": "shelf_iot_sensors",
-  "domain": "Warehouse",
-  "description": "Physical weight and RFID sensor feed for warehouse stock.",
-  "fallback_value": 52,
-  "records": [
-    {"warehouse_id": "W1", "kit_type": "K1", "total_shelf_weight_kg": 260, "unit_weight_kg": 5, "physical_count": 52},
-    {"warehouse_id": "W2", "kit_type": "K1", "total_shelf_weight_kg": 320, "unit_weight_kg": 5, "physical_count": 64},
-    {"warehouse_id": "W3", "kit_type": "K1", "total_shelf_weight_kg": 200, "unit_weight_kg": 5, "physical_count": 40}
-  ]
+ "tool_id": "shelf_iot_sensors",
+ "domain": "Warehouse",
+ "description": "Physical weight sensor feed for warehouse stock.",
+ "records": [
+  {
+   "warehouse_id": "W1",
+   "medicine_name": "Malaria Treatment",
+   "total_shelf_weight_kg": 4250,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W1",
+   "medicine_name": "Tuberculosis Treatment",
+   "total_shelf_weight_kg": 1500,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W1",
+   "medicine_name": "Kwashiorkor Nutrition Support",
+   "total_shelf_weight_kg": 3000,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W1",
+   "medicine_name": "Paracetamol",
+   "total_shelf_weight_kg": 7500,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W1",
+   "medicine_name": "Antibiotics",
+   "total_shelf_weight_kg": 4500,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W2",
+   "medicine_name": "Malaria Treatment",
+   "total_shelf_weight_kg": 3100,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W2",
+   "medicine_name": "Tuberculosis Treatment",
+   "total_shelf_weight_kg": 1300,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W2",
+   "medicine_name": "Kwashiorkor Nutrition Support",
+   "total_shelf_weight_kg": 2750,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W2",
+   "medicine_name": "Paracetamol",
+   "total_shelf_weight_kg": 5500,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W2",
+   "medicine_name": "Antibiotics",
+   "total_shelf_weight_kg": 3100,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W3",
+   "medicine_name": "Malaria Treatment",
+   "total_shelf_weight_kg": 2350,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W3",
+   "medicine_name": "Tuberculosis Treatment",
+   "total_shelf_weight_kg": 1200,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W3",
+   "medicine_name": "Kwashiorkor Nutrition Support",
+   "total_shelf_weight_kg": 2100,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W3",
+   "medicine_name": "Paracetamol",
+   "total_shelf_weight_kg": 4750,
+   "unit_weight_kg": 5
+  },
+  {
+   "warehouse_id": "W3",
+   "medicine_name": "Antibiotics",
+   "total_shelf_weight_kg": 3900,
+   "unit_weight_kg": 5
+  }
+ ]
 }

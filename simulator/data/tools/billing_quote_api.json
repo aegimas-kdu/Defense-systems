@@ -1,11 +1,385 @@
 {
-  "tool_id": "billing_quote_api",
-  "domain": "Logistics",
-  "description": "Quotes the total trip cost paid by the NGO for a route.",
-  "fallback_value": 450,
-  "records": [
-    {"warehouse_id": "W1", "hospital_id": "C2", "vehicle_type": "Truck", "base_dispatch_fee": 75, "total_quoted_cost": 500},
-    {"warehouse_id": "W2", "hospital_id": "C2", "vehicle_type": "Truck", "base_dispatch_fee": 75, "total_quoted_cost": 420},
-    {"warehouse_id": "W3", "hospital_id": "C2", "vehicle_type": "Truck", "base_dispatch_fee": 75, "total_quoted_cost": 480}
-  ]
+ "tool_id": "billing_quote_api",
+ "domain": "Logistics",
+ "description": "Quotes the total trip cost paid by the NGO for a route.",
+ "records": [
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C1",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 360
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C1",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 480
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C1",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 600
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C2",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 360
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C2",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 480
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C2",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 600
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C3",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 140,
+   "total_quoted_cost": 420
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C3",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 140,
+   "total_quoted_cost": 560
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C3",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 140,
+   "total_quoted_cost": 700
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C4",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 130,
+   "total_quoted_cost": 390
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C4",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 130,
+   "total_quoted_cost": 520
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C4",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 130,
+   "total_quoted_cost": 650
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C5",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 150,
+   "total_quoted_cost": 450
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C5",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 150,
+   "total_quoted_cost": 600
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C5",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 150,
+   "total_quoted_cost": 750
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C6",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 160,
+   "total_quoted_cost": 480
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C6",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 160,
+   "total_quoted_cost": 640
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C6",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 160,
+   "total_quoted_cost": 800
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C1",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 90,
+   "total_quoted_cost": 270
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C1",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 90,
+   "total_quoted_cost": 360
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C1",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 90,
+   "total_quoted_cost": 450
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C2",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 90,
+   "total_quoted_cost": 270
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C2",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 90,
+   "total_quoted_cost": 360
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C2",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 90,
+   "total_quoted_cost": 450
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C3",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 330
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C3",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 440
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C3",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 550
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C4",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 100,
+   "total_quoted_cost": 300
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C4",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 100,
+   "total_quoted_cost": 400
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C4",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 100,
+   "total_quoted_cost": 500
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C5",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 360
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C5",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 480
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C5",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 600
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C6",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 130,
+   "total_quoted_cost": 390
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C6",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 130,
+   "total_quoted_cost": 520
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C6",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 130,
+   "total_quoted_cost": 650
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C1",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 330
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C1",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 440
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C1",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 550
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C2",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 330
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C2",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 440
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C2",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 550
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C3",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 360
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C3",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 480
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C3",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 120,
+   "total_quoted_cost": 600
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C4",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 330
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C4",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 440
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C4",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 110,
+   "total_quoted_cost": 550
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C5",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 130,
+   "total_quoted_cost": 390
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C5",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 130,
+   "total_quoted_cost": 520
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C5",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 130,
+   "total_quoted_cost": 650
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C6",
+   "vehicle_type": "Van",
+   "billed_mileage_km": 140,
+   "total_quoted_cost": 420
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C6",
+   "vehicle_type": "Truck",
+   "billed_mileage_km": 140,
+   "total_quoted_cost": 560
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C6",
+   "vehicle_type": "Drone",
+   "billed_mileage_km": 140,
+   "total_quoted_cost": 700
+  }
+ ]
 }

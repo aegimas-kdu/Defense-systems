@@ -1,11 +1,22 @@
 {
-  "tool_id": "fleet_specs_catalog",
-  "domain": "Transportation",
-  "description": "Vehicle capabilities for cargo, speed, and capacity.",
-  "fallback_value": 120,
-  "records": [
-    {"vehicle_type": "Van", "max_kit_capacity": 120, "average_speed_kmh": 50},
-    {"vehicle_type": "Truck", "max_kit_capacity": 400, "average_speed_kmh": 42},
-    {"vehicle_type": "Drone", "max_kit_capacity": 60, "average_speed_kmh": 80}
-  ]
+ "tool_id": "fleet_specs_catalog",
+ "domain": "Transportation",
+ "description": "Vehicle capabilities for cargo, speed, and capacity.",
+ "records": [
+  {
+   "vehicle_type": "Van",
+   "max_kit_capacity": 120,
+   "average_speed_kmh": 50
+  },
+  {
+   "vehicle_type": "Truck",
+   "max_kit_capacity": 400,
+   "average_speed_kmh": 42
+  },
+  {
+   "vehicle_type": "Drone",
+   "max_kit_capacity": 60,
+   "average_speed_kmh": 80
+  }
+ ]
 }

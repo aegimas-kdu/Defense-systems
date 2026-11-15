@@ -1,0 +1,11 @@
+{
+  "tool_id": "live_gps_telemetry",
+  "domain": "Transportation",
+  "description": "Real-time GPS status including speed, delays, and active vehicle condition.",
+  "fallback_value": 45,
+  "records": [
+    {"vehicle_id": "V1", "current_location": "W1", "live_speed_kmh": 45, "traffic_delay_minutes": 0, "active_status": "available"},
+    {"vehicle_id": "V2", "current_location": "W2", "live_speed_kmh": 42, "traffic_delay_minutes": 0, "active_status": "available"},
+    {"vehicle_id": "V3", "current_location": "W3", "live_speed_kmh": 48, "traffic_delay_minutes": 0, "active_status": "available"}
+  ]
+}

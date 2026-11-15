@@ -1,28 +1,21 @@
-from simulator.app import choose_warehouse_for_order, get_camps, get_medicine_catalog
+from simulator.participants.hospital import get_camp_registry
+from simulator.agents.coordinator import AgentCoordinator
 
 
 def test_registered_camps_are_available():
-    camps = get_camps()
-    assert len(camps) >= 5
-    assert {camp["name"] for camp in camps} >= {
-        "Muyinga Health Centre",
-        "Rutana Refugee Camp",
-        "Cankuzo Clinic",
-        "Bubanza Community Clinic",
-        "Gitega Health Post",
-    }
+    names = {camp["name"] for camp in get_camp_registry()}
+    assert len(names) >= 5
+    assert names >= {"Muyinga Health Centre", "Rutana Refugee Camp", "Cankuzo Clinic",
+                     "Bubanza Community Clinic", "Gitega Health Post"}
 
 
-def test_warehouse_selection_favors_nearest_stocked_option_within_budget():
-    catalog = get_medicine_catalog()
-    medicine = next(m for m in catalog if m["name"] == "Malaria Treatment")
-    order = {
-        "medicine": medicine,
-        "quantity": 50,
-        "camp_name": "Muyinga Health Centre",
-        "budget_limit": 5000,
-    }
+def test_simulation_picks_cheapest_feasible_option_within_budget():
+    result = AgentCoordinator().run_simulation("Malaria Treatment", 50, "Muyinga Health Centre")
+    assert result["warehouse"]["decision"] == "Approved"
+    assert result["warehouse"]["warehouse_name"] == "Gitega Regional Warehouse"  # W2 is nearest to C1
+    assert result["transportation"]["vehicle"] == "Van"
 
-    choice = choose_warehouse_for_order(order)
-    assert choice["warehouse_name"] in {"Kigali Central Warehouse", "Gitega Regional Warehouse"}
-    assert choice["status"] == "approved"
+
+def test_unregistered_clinic_is_rejected():
+    result = AgentCoordinator().run_simulation("Malaria Treatment", 50, "Nowhere Camp")
+    assert result["warehouse"]["decision"] == "Rejected"

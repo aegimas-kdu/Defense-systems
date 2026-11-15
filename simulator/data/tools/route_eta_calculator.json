@@ -1,11 +1,439 @@
 {
-  "tool_id": "route_eta_calculator",
-  "domain": "Transportation",
-  "description": "Calculated route time estimates for dispatch planning.",
-  "fallback_value": 140,
-  "records": [
-    {"origin_warehouse": "W1", "destination_hospital": "C2", "vehicle_type": "Truck", "estimated_minutes": 140},
-    {"origin_warehouse": "W2", "destination_hospital": "C2", "vehicle_type": "Truck", "estimated_minutes": 150},
-    {"origin_warehouse": "W3", "destination_hospital": "C2", "vehicle_type": "Truck", "estimated_minutes": 130}
-  ]
+ "tool_id": "route_eta_calculator",
+ "domain": "Transportation",
+ "description": "Calculated route time estimates for dispatch planning.",
+ "records": [
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C1",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 144
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C1",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 171
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C1",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 90
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C2",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 144
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C2",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 171
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C2",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 90
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C3",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 168
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C3",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 200
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C3",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 105
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C4",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 156
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C4",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 186
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C4",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 98
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C5",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 180
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C5",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 214
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C5",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 112
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C6",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 192
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C6",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 229
+  },
+  {
+   "origin_warehouse": "W1",
+   "destination_hospital": "C6",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 120
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C1",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 108
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C1",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 129
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C1",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 68
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C2",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 108
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C2",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 129
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C2",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 68
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C3",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 132
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C3",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 157
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C3",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 82
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C4",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 120
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C4",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 143
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C4",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 75
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C5",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 144
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C5",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 171
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C5",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 90
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C6",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 156
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C6",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 186
+  },
+  {
+   "origin_warehouse": "W2",
+   "destination_hospital": "C6",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 98
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C1",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 132
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C1",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 157
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C1",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 82
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C2",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 132
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C2",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 157
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C2",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 82
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C3",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 144
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C3",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 171
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C3",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 90
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C4",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 132
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C4",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 157
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C4",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 82
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C5",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 156
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C5",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 186
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C5",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 98
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C6",
+   "vehicle_type": "Van",
+   "cargo_bay_volume_l": 2400,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 168
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C6",
+   "vehicle_type": "Truck",
+   "cargo_bay_volume_l": 8000,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 200
+  },
+  {
+   "origin_warehouse": "W3",
+   "destination_hospital": "C6",
+   "vehicle_type": "Drone",
+   "cargo_bay_volume_l": 1200,
+   "kit_box_volume_l": 20,
+   "estimated_minutes": 105
+  }
+ ]
 }

@@ -1,11 +1,385 @@
 {
-  "tool_id": "gis_distance_matrix",
-  "domain": "Logistics",
-  "description": "Map-based distance lookup between warehouse and camp locations.",
-  "fallback_value": 100,
-  "records": [
-    {"warehouse_id": "W1", "hospital_id": "C2", "distance_km": 120, "road_type": "mixed"},
-    {"warehouse_id": "W2", "hospital_id": "C2", "distance_km": 90, "road_type": "paved"},
-    {"warehouse_id": "W3", "hospital_id": "C2", "distance_km": 110, "road_type": "mixed"}
-  ]
+ "tool_id": "gis_distance_matrix",
+ "domain": "Logistics",
+ "description": "Map-based distance and base rate per route.",
+ "records": [
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C1",
+   "vehicle_type": "Van",
+   "map_distance_km": 120,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C1",
+   "vehicle_type": "Truck",
+   "map_distance_km": 120,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C1",
+   "vehicle_type": "Drone",
+   "map_distance_km": 120,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C2",
+   "vehicle_type": "Van",
+   "map_distance_km": 120,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C2",
+   "vehicle_type": "Truck",
+   "map_distance_km": 120,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C2",
+   "vehicle_type": "Drone",
+   "map_distance_km": 120,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C3",
+   "vehicle_type": "Van",
+   "map_distance_km": 140,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C3",
+   "vehicle_type": "Truck",
+   "map_distance_km": 140,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C3",
+   "vehicle_type": "Drone",
+   "map_distance_km": 140,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C4",
+   "vehicle_type": "Van",
+   "map_distance_km": 130,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C4",
+   "vehicle_type": "Truck",
+   "map_distance_km": 130,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C4",
+   "vehicle_type": "Drone",
+   "map_distance_km": 130,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C5",
+   "vehicle_type": "Van",
+   "map_distance_km": 150,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C5",
+   "vehicle_type": "Truck",
+   "map_distance_km": 150,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C5",
+   "vehicle_type": "Drone",
+   "map_distance_km": 150,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C6",
+   "vehicle_type": "Van",
+   "map_distance_km": 160,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C6",
+   "vehicle_type": "Truck",
+   "map_distance_km": 160,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C6",
+   "vehicle_type": "Drone",
+   "map_distance_km": 160,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C1",
+   "vehicle_type": "Van",
+   "map_distance_km": 90,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C1",
+   "vehicle_type": "Truck",
+   "map_distance_km": 90,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C1",
+   "vehicle_type": "Drone",
+   "map_distance_km": 90,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C2",
+   "vehicle_type": "Van",
+   "map_distance_km": 90,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C2",
+   "vehicle_type": "Truck",
+   "map_distance_km": 90,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C2",
+   "vehicle_type": "Drone",
+   "map_distance_km": 90,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C3",
+   "vehicle_type": "Van",
+   "map_distance_km": 110,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C3",
+   "vehicle_type": "Truck",
+   "map_distance_km": 110,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C3",
+   "vehicle_type": "Drone",
+   "map_distance_km": 110,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C4",
+   "vehicle_type": "Van",
+   "map_distance_km": 100,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C4",
+   "vehicle_type": "Truck",
+   "map_distance_km": 100,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C4",
+   "vehicle_type": "Drone",
+   "map_distance_km": 100,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C5",
+   "vehicle_type": "Van",
+   "map_distance_km": 120,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C5",
+   "vehicle_type": "Truck",
+   "map_distance_km": 120,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C5",
+   "vehicle_type": "Drone",
+   "map_distance_km": 120,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C6",
+   "vehicle_type": "Van",
+   "map_distance_km": 130,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C6",
+   "vehicle_type": "Truck",
+   "map_distance_km": 130,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C6",
+   "vehicle_type": "Drone",
+   "map_distance_km": 130,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C1",
+   "vehicle_type": "Van",
+   "map_distance_km": 110,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C1",
+   "vehicle_type": "Truck",
+   "map_distance_km": 110,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C1",
+   "vehicle_type": "Drone",
+   "map_distance_km": 110,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C2",
+   "vehicle_type": "Van",
+   "map_distance_km": 110,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C2",
+   "vehicle_type": "Truck",
+   "map_distance_km": 110,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C2",
+   "vehicle_type": "Drone",
+   "map_distance_km": 110,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C3",
+   "vehicle_type": "Van",
+   "map_distance_km": 120,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C3",
+   "vehicle_type": "Truck",
+   "map_distance_km": 120,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C3",
+   "vehicle_type": "Drone",
+   "map_distance_km": 120,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C4",
+   "vehicle_type": "Van",
+   "map_distance_km": 110,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C4",
+   "vehicle_type": "Truck",
+   "map_distance_km": 110,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C4",
+   "vehicle_type": "Drone",
+   "map_distance_km": 110,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C5",
+   "vehicle_type": "Van",
+   "map_distance_km": 130,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C5",
+   "vehicle_type": "Truck",
+   "map_distance_km": 130,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C5",
+   "vehicle_type": "Drone",
+   "map_distance_km": 130,
+   "base_rate_per_km": 5
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C6",
+   "vehicle_type": "Van",
+   "map_distance_km": 140,
+   "base_rate_per_km": 3
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C6",
+   "vehicle_type": "Truck",
+   "map_distance_km": 140,
+   "base_rate_per_km": 4
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C6",
+   "vehicle_type": "Drone",
+   "map_distance_km": 140,
+   "base_rate_per_km": 5
+  }
+ ]
 }

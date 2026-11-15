@@ -1,11 +1,31 @@
 {
-  "tool_id": "live_gps_telemetry",
-  "domain": "Transportation",
-  "description": "Real-time GPS status including speed, delays, and active vehicle condition.",
-  "fallback_value": 45,
-  "records": [
-    {"vehicle_id": "V1", "current_location": "W1", "live_speed_kmh": 45, "traffic_delay_minutes": 10, "active_status": "available"},
-    {"vehicle_id": "V2", "current_location": "W2", "live_speed_kmh": 42, "traffic_delay_minutes": 14, "active_status": "available"},
-    {"vehicle_id": "V3", "current_location": "W3", "live_speed_kmh": 48, "traffic_delay_minutes": 6, "active_status": "available"}
-  ]
+ "tool_id": "live_gps_telemetry",
+ "domain": "Transportation",
+ "description": "Real-time vehicle speed, delay and payload limits.",
+ "records": [
+  {
+   "vehicle_type": "Van",
+   "max_payload_kg": 600,
+   "kit_unit_weight_kg": 5,
+   "live_speed_kmh": 50,
+   "traffic_delay_minutes": 0,
+   "active_status": "available"
+  },
+  {
+   "vehicle_type": "Truck",
+   "max_payload_kg": 2000,
+   "kit_unit_weight_kg": 5,
+   "live_speed_kmh": 42,
+   "traffic_delay_minutes": 0,
+   "active_status": "available"
+  },
+  {
+   "vehicle_type": "Drone",
+   "max_payload_kg": 300,
+   "kit_unit_weight_kg": 5,
+   "live_speed_kmh": 80,
+   "traffic_delay_minutes": 0,
+   "active_status": "available"
+  }
+ ]
 }

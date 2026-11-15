@@ -1,31 +1,37 @@
 
 CLINIC_REGISTRY = [
     {
+        "camp_id": "C1",
         "name": "Muyinga Health Centre",
         "location": {"latitude": -2.8470, "longitude": 30.3278},
         "region": "Muyinga",
     },
     {
+        "camp_id": "C2",
         "name": "Rutana Refugee Camp",
         "location": {"latitude": -3.9271, "longitude": 30.1189},
         "region": "Rutana",
     },
     {
+        "camp_id": "C3",
         "name": "Cankuzo Clinic",
         "location": {"latitude": -3.2145, "longitude": 30.5411},
         "region": "Cankuzo",
     },
     {
+        "camp_id": "C4",
         "name": "Bubanza Community Clinic",
         "location": {"latitude": -3.0831, "longitude": 29.3956},
         "region": "Bubanza",
     },
     {
+        "camp_id": "C5",
         "name": "Gitega Health Post",
         "location": {"latitude": -3.4286, "longitude": 29.9253},
         "region": "Gitega",
     },
     {
+        "camp_id": "C6",
         "name": "Ngozi Primary Care Centre",
         "location": {"latitude": -2.9089, "longitude": 29.8273},
         "region": "Ngozi",

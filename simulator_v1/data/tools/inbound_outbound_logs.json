@@ -1,0 +1,23 @@
+{
+  "tool_id": "inbound_outbound_logs",
+  "domain": "Warehouse",
+  "description": "Movement history for stock inflows and shipments.",
+  "fallback_value": 50,
+  "records": [
+    {"warehouse_id": "W1", "medicine_name": "Malaria Treatment", "starting_stock": 900, "total_shipped_today": 50, "remaining_stock": 850},
+    {"warehouse_id": "W1", "medicine_name": "Tuberculosis Treatment", "starting_stock": 350, "total_shipped_today": 50, "remaining_stock": 300},
+    {"warehouse_id": "W1", "medicine_name": "Kwashiorkor Nutrition Support", "starting_stock": 650, "total_shipped_today": 50, "remaining_stock": 600},
+    {"warehouse_id": "W1", "medicine_name": "Paracetamol", "starting_stock": 1550, "total_shipped_today": 50, "remaining_stock": 1500},
+    {"warehouse_id": "W1", "medicine_name": "Antibiotics", "starting_stock": 950, "total_shipped_today": 50, "remaining_stock": 900},
+    {"warehouse_id": "W2", "medicine_name": "Malaria Treatment", "starting_stock": 670, "total_shipped_today": 50, "remaining_stock": 620},
+    {"warehouse_id": "W2", "medicine_name": "Tuberculosis Treatment", "starting_stock": 310, "total_shipped_today": 50, "remaining_stock": 260},
+    {"warehouse_id": "W2", "medicine_name": "Kwashiorkor Nutrition Support", "starting_stock": 600, "total_shipped_today": 50, "remaining_stock": 550},
+    {"warehouse_id": "W2", "medicine_name": "Paracetamol", "starting_stock": 1150, "total_shipped_today": 50, "remaining_stock": 1100},
+    {"warehouse_id": "W2", "medicine_name": "Antibiotics", "starting_stock": 670, "total_shipped_today": 50, "remaining_stock": 620},
+    {"warehouse_id": "W3", "medicine_name": "Malaria Treatment", "starting_stock": 520, "total_shipped_today": 50, "remaining_stock": 470},
+    {"warehouse_id": "W3", "medicine_name": "Tuberculosis Treatment", "starting_stock": 290, "total_shipped_today": 50, "remaining_stock": 240},
+    {"warehouse_id": "W3", "medicine_name": "Kwashiorkor Nutrition Support", "starting_stock": 470, "total_shipped_today": 50, "remaining_stock": 420},
+    {"warehouse_id": "W3", "medicine_name": "Paracetamol", "starting_stock": 1000, "total_shipped_today": 50, "remaining_stock": 950},
+    {"warehouse_id": "W3", "medicine_name": "Antibiotics", "starting_stock": 830, "total_shipped_today": 50, "remaining_stock": 780}
+  ]
+}

@@ -1,11 +1,493 @@
 {
-  "tool_id": "fuel_and_toll_rates",
-  "domain": "Logistics",
-  "description": "Operational cost assumptions for fuel, tolls, and mileage rates.",
-  "fallback_value": 420,
-  "records": [
-    {"vehicle_type": "Truck", "cost_per_km": 1.1, "highway_toll_fee": 35, "expected_fuel_liters": 18},
-    {"vehicle_type": "Van", "cost_per_km": 0.9, "highway_toll_fee": 20, "expected_fuel_liters": 12},
-    {"vehicle_type": "Drone", "cost_per_km": 1.5, "highway_toll_fee": 0, "expected_fuel_liters": 4}
-  ]
+ "tool_id": "fuel_and_toll_rates",
+ "domain": "Logistics",
+ "description": "Fuel and toll expense per route.",
+ "records": [
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C1",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 12,
+   "toll_fee": 216
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C1",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 24,
+   "toll_fee": 120
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C1",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 12,
+   "toll_fee": 360
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C2",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 12,
+   "toll_fee": 216
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C2",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 24,
+   "toll_fee": 120
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C2",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 12,
+   "toll_fee": 360
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C3",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 14,
+   "toll_fee": 252
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C3",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 28,
+   "toll_fee": 140
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C3",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 14,
+   "toll_fee": 420
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C4",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 13,
+   "toll_fee": 234
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C4",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 26,
+   "toll_fee": 130
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C4",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 13,
+   "toll_fee": 390
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C5",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 15,
+   "toll_fee": 270
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C5",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 30,
+   "toll_fee": 150
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C5",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 15,
+   "toll_fee": 450
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C6",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 16,
+   "toll_fee": 288
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C6",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 32,
+   "toll_fee": 160
+  },
+  {
+   "warehouse_id": "W1",
+   "hospital_id": "C6",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 16,
+   "toll_fee": 480
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C1",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 9,
+   "toll_fee": 162
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C1",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 18,
+   "toll_fee": 90
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C1",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 9,
+   "toll_fee": 270
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C2",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 9,
+   "toll_fee": 162
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C2",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 18,
+   "toll_fee": 90
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C2",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 9,
+   "toll_fee": 270
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C3",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 11,
+   "toll_fee": 198
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C3",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 22,
+   "toll_fee": 110
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C3",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 11,
+   "toll_fee": 330
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C4",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 10,
+   "toll_fee": 180
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C4",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 20,
+   "toll_fee": 100
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C4",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 10,
+   "toll_fee": 300
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C5",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 12,
+   "toll_fee": 216
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C5",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 24,
+   "toll_fee": 120
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C5",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 12,
+   "toll_fee": 360
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C6",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 13,
+   "toll_fee": 234
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C6",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 26,
+   "toll_fee": 130
+  },
+  {
+   "warehouse_id": "W2",
+   "hospital_id": "C6",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 13,
+   "toll_fee": 390
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C1",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 11,
+   "toll_fee": 198
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C1",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 22,
+   "toll_fee": 110
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C1",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 11,
+   "toll_fee": 330
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C2",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 11,
+   "toll_fee": 198
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C2",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 22,
+   "toll_fee": 110
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C2",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 11,
+   "toll_fee": 330
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C3",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 12,
+   "toll_fee": 216
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C3",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 24,
+   "toll_fee": 120
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C3",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 12,
+   "toll_fee": 360
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C4",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 11,
+   "toll_fee": 198
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C4",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 22,
+   "toll_fee": 110
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C4",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 11,
+   "toll_fee": 330
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C5",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 13,
+   "toll_fee": 234
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C5",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 26,
+   "toll_fee": 130
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C5",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 13,
+   "toll_fee": 390
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C6",
+   "vehicle_type": "Van",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 12,
+   "expected_fuel_liters": 14,
+   "toll_fee": 252
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C6",
+   "vehicle_type": "Truck",
+   "vehicle_km_per_liter": 5,
+   "fuel_price_per_liter": 15,
+   "expected_fuel_liters": 28,
+   "toll_fee": 140
+  },
+  {
+   "warehouse_id": "W3",
+   "hospital_id": "C6",
+   "vehicle_type": "Drone",
+   "vehicle_km_per_liter": 10,
+   "fuel_price_per_liter": 20,
+   "expected_fuel_liters": 14,
+   "toll_fee": 420
+  }
+ ]
 }

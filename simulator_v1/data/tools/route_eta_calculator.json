@@ -1,0 +1,26 @@
+{
+  "tool_id": "route_eta_calculator",
+  "domain": "Transportation",
+  "description": "Calculated route time estimates for dispatch planning.",
+  "fallback_value": 140,
+  "records": [
+    {"origin_warehouse": "W1", "destination_hospital": "C1", "vehicle_type": "Truck", "estimated_minutes": 140},
+    {"origin_warehouse": "W1", "destination_hospital": "C2", "vehicle_type": "Truck", "estimated_minutes": 140},
+    {"origin_warehouse": "W1", "destination_hospital": "C3", "vehicle_type": "Truck", "estimated_minutes": 160},
+    {"origin_warehouse": "W1", "destination_hospital": "C4", "vehicle_type": "Truck", "estimated_minutes": 150},
+    {"origin_warehouse": "W1", "destination_hospital": "C5", "vehicle_type": "Truck", "estimated_minutes": 170},
+    {"origin_warehouse": "W1", "destination_hospital": "C6", "vehicle_type": "Truck", "estimated_minutes": 180},
+    {"origin_warehouse": "W2", "destination_hospital": "C1", "vehicle_type": "Truck", "estimated_minutes": 120},
+    {"origin_warehouse": "W2", "destination_hospital": "C2", "vehicle_type": "Truck", "estimated_minutes": 120},
+    {"origin_warehouse": "W2", "destination_hospital": "C3", "vehicle_type": "Truck", "estimated_minutes": 140},
+    {"origin_warehouse": "W2", "destination_hospital": "C4", "vehicle_type": "Truck", "estimated_minutes": 130},
+    {"origin_warehouse": "W2", "destination_hospital": "C5", "vehicle_type": "Truck", "estimated_minutes": 150},
+    {"origin_warehouse": "W2", "destination_hospital": "C6", "vehicle_type": "Truck", "estimated_minutes": 160},
+    {"origin_warehouse": "W3", "destination_hospital": "C1", "vehicle_type": "Truck", "estimated_minutes": 130},
+    {"origin_warehouse": "W3", "destination_hospital": "C2", "vehicle_type": "Truck", "estimated_minutes": 130},
+    {"origin_warehouse": "W3", "destination_hospital": "C3", "vehicle_type": "Truck", "estimated_minutes": 150},
+    {"origin_warehouse": "W3", "destination_hospital": "C4", "vehicle_type": "Truck", "estimated_minutes": 140},
+    {"origin_warehouse": "W3", "destination_hospital": "C5", "vehicle_type": "Truck", "estimated_minutes": 160},
+    {"origin_warehouse": "W3", "destination_hospital": "C6", "vehicle_type": "Truck", "estimated_minutes": 170}
+  ]
+}

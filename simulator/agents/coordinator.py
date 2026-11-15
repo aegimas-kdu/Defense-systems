@@ -1,146 +1,115 @@
+"""Coordinator: asks the five questions in order, lets the defense decide, then builds the plan from
+the DECIDED values only. It never reads warehouse.py or truth.py for stock, distance, time or cost."""
+import itertools
 
 try:
-    from simulator.registry import get_agent_registry, get_tool_read
+    from simulator import registry
+    from simulator.defense import MajorityVoteDefense, NoConsensus
     from simulator.participants.hospital import find_camp
-    from simulator.participants.warehouse import get_warehouse_registry, get_distance_km, get_medicine_stock
+    from simulator.world_ids import WAREHOUSE_IDS, VEHICLE_TYPES
 except ModuleNotFoundError:  # pragma: no cover
-    from registry import get_agent_registry, get_tool_read
+    import registry
+    from defense import MajorityVoteDefense, NoConsensus
     from participants.hospital import find_camp
-    from participants.warehouse import get_warehouse_registry, get_distance_km, get_medicine_stock
+    from world_ids import WAREHOUSE_IDS, VEHICLE_TYPES
+
+DEFAULT_NGO_BUDGET = 50000  # cost units, as in the system description
 
 
 class AgentCoordinator:
-    def __init__(self):
-        self.agent_registry = get_agent_registry()
+    def __init__(self, defense=None, world=None):
+        self.world = world or registry.get_world()
+        self.defense = defense or MajorityVoteDefense()
+        self._mission_ids = itertools.count(1)
 
-    @staticmethod
-    def normalize_vehicle_type(vehicle_name):
-        if vehicle_name is None:
-            return 'Truck'
-        name = str(vehicle_name).strip()
-        if name.lower().startswith('truck'):
-            return 'Truck'
-        if name.lower().startswith('van'):
-            return 'Van'
-        if name.lower().startswith('drone'):
-            return 'Drone'
-        return name
+    def ask(self, question, key, inputs=None, mission_id=None):
+        """Send ONE question to ALL three agents of its domain. Returns (decided value, claims)."""
+        domain = registry.QUESTIONS[question]['domain']
+        claims = [
+            registry.get_claim(a['agent_id'], question, key, inputs, mission_id, world=self.world)
+            for a in self.world['agents'] if a['domain'] == domain
+        ]
+        return self.defense.decide(question, key, claims), claims
 
-    @staticmethod
-    def warehouse_id_for_name(warehouse_name):
-        mapping = {
-            'Kigali Central Warehouse': 'W1',
-            'Gitega Regional Warehouse': 'W2',
-            'Bujumbura Supply Hub': 'W3',
-        }
-        return mapping.get(warehouse_name, 'W1')
-
-    def collect_agent_reads(self, warehouse_id, hospital_id, vehicle_type):
-        agent_reads = []
-        normalized_vehicle = self.normalize_vehicle_type(vehicle_type)
-        for agent in self.agent_registry:
-            if agent['domain'] == 'Warehouse':
-                read = get_tool_read(agent['agent_id'], 'stock', warehouse=warehouse_id)
-            elif agent['domain'] == 'Transportation':
-                read = get_tool_read(
-                    agent['agent_id'],
-                    'vehicle',
-                    warehouse=warehouse_id,
-                    hospital=hospital_id,
-                    vehicle=normalized_vehicle,
-                )
-            else:
-                if agent['agent_id'].endswith('_1'):
-                    question = 'distance'
-                else:
-                    question = 'cost'
-                read = get_tool_read(
-                    agent['agent_id'],
-                    question,
-                    warehouse=warehouse_id,
-                    hospital=hospital_id,
-                    vehicle=normalized_vehicle,
-                )
-            agent_reads.append(read)
-        return agent_reads
-
-    def run_simulation(self, medicine_name, quantity, camp_name):
+    def run_simulation(self, medicine_name, quantity, camp_name, budget=DEFAULT_NGO_BUDGET,
+                       deadline_minutes=None):
         camp = find_camp(camp_name)
         if camp is None:
-            return {
-                'hospital': {'clinic_name': camp_name},
-                'warehouse': {'decision': 'Rejected', 'reason': 'Clinic is not registered.'},
-                'transportation': None,
-                'logs': ['Clinic not registered in the system.'],
-                'agents': [],
-            }
+            return self._rejected(camp_name, medicine_name, quantity, 'Clinic is not registered.',
+                                  ['Clinic not registered in the system.'], [])
+        hospital_id = camp['camp_id']
+        mission_id = next(self._mission_ids)
+        all_claims, notes, candidates = [], [], []
 
-        candidates = []
-        for warehouse in get_warehouse_registry():
-            stock = get_medicine_stock(warehouse['warehouse_name'], medicine_name)
-            if stock is None or stock['quantity'] < quantity:
+        for warehouse_name, wid in WAREHOUSE_IDS.items():
+            # Q1 stock
+            try:
+                stock, claims = self.ask('Q1', {'warehouse': wid, 'medicine': medicine_name}, mission_id=mission_id)
+            except NoConsensus as exc:
+                notes.append(str(exc)); continue
+            all_claims += claims
+            if stock < quantity:
+                notes.append(f'{warehouse_name}: stock {stock} < requested {quantity}.')
                 continue
-            distance_km = get_distance_km(camp['location'], warehouse['location'])
-            cost = distance_km * warehouse['cost_per_km'] + warehouse['handling_fee']
-            if cost > warehouse['budget_limit']:
-                continue
-            candidates.append({
-                'warehouse_name': warehouse['warehouse_name'],
-                'distance_km': round(distance_km, 2),
-                'transport_cost': round(cost, 2),
-                'stock': stock['quantity'],
-            })
+
+            for vehicle in VEHICLE_TYPES:
+                key = {'warehouse': wid, 'hospital': hospital_id, 'vehicle': vehicle}
+                try:
+                    capacity, c2 = self.ask('Q2', key, mission_id=mission_id)
+                    all_claims += c2
+                    if capacity < quantity:
+                        notes.append(f'{warehouse_name}/{vehicle}: capacity {capacity} < {quantity}.')
+                        continue
+                    distance, c3 = self.ask('Q3', key, mission_id=mission_id)
+                    minutes, c4 = self.ask('Q4', key, {'resolved_distance_km': distance}, mission_id)
+                    cost, c5 = self.ask('Q5', key, mission_id=mission_id)
+                except NoConsensus as exc:
+                    notes.append(str(exc)); continue
+                all_claims += c3 + c4 + c5
+                if cost > budget:
+                    notes.append(f'{warehouse_name}/{vehicle}: cost {cost} exceeds budget {budget}.')
+                    continue
+                if deadline_minutes is not None and minutes > deadline_minutes:
+                    notes.append(f'{warehouse_name}/{vehicle}: {minutes} min misses deadline {deadline_minutes}.')
+                    continue
+                candidates.append({'warehouse_name': warehouse_name, 'vehicle': vehicle, 'stock': stock,
+                                   'distance_km': distance, 'minutes': minutes, 'cost': cost,
+                                   'claims': claims + c2 + c3 + c4 + c5})
 
         if not candidates:
-            return {
-                'hospital': {'clinic_name': camp_name, 'medicine_name': medicine_name, 'quantity': quantity},
-                'warehouse': {'decision': 'Rejected', 'reason': 'No warehouse has enough stock within the current budget.'},
-                'transportation': None,
-                'logs': ['No feasible warehouse could satisfy the request under the NGO budget.'],
-                'agents': self.collect_agent_reads('W1', 'C2', 'Truck'),
-            }
+            return self._rejected(camp_name, medicine_name, quantity,
+                                  'No warehouse and vehicle can satisfy the request within stock, capacity, budget and deadline.',
+                                  notes or ['No feasible plan.'], all_claims)
 
-        warehouse = min(candidates, key=lambda item: (item['transport_cost'], item['distance_km']))
-        service = {
-            'clinic_name': camp_name,
-            'medicine_name': medicine_name,
-            'quantity': quantity,
-            'selected_warehouse': warehouse['warehouse_name'],
-            'distance_km': warehouse['distance_km'],
-            'transport_cost': warehouse['transport_cost'],
-        }
-
-        vehicle = next((vehicle for vehicle in next(w['fleet'] for w in get_warehouse_registry() if w['warehouse_name'] == warehouse['warehouse_name'])), None)
-        selected_warehouse_id = self.warehouse_id_for_name(warehouse['warehouse_name'])
-        normalized_vehicle_type = self.normalize_vehicle_type(vehicle['name'] if vehicle else 'Truck')
-        agent_reads = self.collect_agent_reads(selected_warehouse_id, 'C2', normalized_vehicle_type)
-
-        transport = {
-            'decision': 'Approved',
-            'reason': 'Route approved by the transportation domain agents.',
-            'vehicle': vehicle['name'] if vehicle else 'Truck',
-            'distance_km': warehouse['distance_km'],
-            'delivery_time_hours': round(warehouse['distance_km'] / vehicle['speed_kmh'], 2) if vehicle else 0,
-            'transportation_cost': warehouse['transport_cost'],
-        }
-
+        best = min(candidates, key=lambda c: (c['cost'], c['minutes']))
         logs = [
-            f"Clinic {camp_name} requested {quantity} units of {medicine_name}.",
-            f"Warehouse domain checked stock and selected {warehouse['warehouse_name']}.",
-            f"Transportation domain approved the route using {transport['vehicle']}.",
-            f"Logistics agents verified total cost of ${transport['transportation_cost']:.0f}."
+            f'Clinic {camp_name} requested {quantity} units of {medicine_name}.',
+            f"Warehouse domain agreed on stock {best['stock']} at {best['warehouse_name']}.",
+            f"Transportation domain agreed {best['vehicle']} can carry the load; ETA {best['minutes']} min.",
+            f"Logistics domain agreed on {best['distance_km']} km and a cost of {best['cost']}.",
         ]
-
         return {
             'hospital': {'clinic_name': camp_name, 'medicine_name': medicine_name, 'quantity': quantity},
-            'warehouse': {
-                'decision': 'Approved',
-                'reason': 'Nearest warehouse with sufficient stock and budget feasibility was selected.',
-                'warehouse_name': warehouse['warehouse_name'],
-                'distance_km': warehouse['distance_km'],
-                'transport_cost': warehouse['transport_cost'],
-            },
-            'transportation': transport,
+            'warehouse': {'decision': 'Approved',
+                          'reason': 'Cheapest feasible warehouse and vehicle chosen from defense-decided values.',
+                          'warehouse_name': best['warehouse_name'], 'distance_km': best['distance_km'],
+                          'transport_cost': best['cost']},
+            'transportation': {'decision': 'Approved', 'reason': 'Route approved by the transportation domain agents.',
+                               'vehicle': best['vehicle'], 'distance_km': best['distance_km'],
+                               'delivery_time_minutes': best['minutes'],
+                               'delivery_time_hours': round(best['minutes'] / 60, 2),
+                               'transportation_cost': best['cost']},
             'logs': logs,
-            'agents': agent_reads,
+            'agents': best['claims'],
+            'mission_id': mission_id,
+        }
+
+    @staticmethod
+    def _rejected(camp_name, medicine_name, quantity, reason, logs, claims):
+        return {
+            'hospital': {'clinic_name': camp_name, 'medicine_name': medicine_name, 'quantity': quantity},
+            'warehouse': {'decision': 'Rejected', 'reason': reason},
+            'transportation': None,
+            'logs': logs,
+            'agents': claims,
         }

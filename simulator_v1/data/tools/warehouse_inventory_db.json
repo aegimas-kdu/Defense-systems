@@ -1,0 +1,23 @@
+{
+  "tool_id": "warehouse_inventory_db",
+  "domain": "Warehouse",
+  "description": "Main ledger for current warehouse stock counts.",
+  "fallback_value": 50,
+  "records": [
+    {"warehouse_id": "W1", "medicine_name": "Malaria Treatment", "listed_stock_count": 850},
+    {"warehouse_id": "W1", "medicine_name": "Tuberculosis Treatment", "listed_stock_count": 300},
+    {"warehouse_id": "W1", "medicine_name": "Kwashiorkor Nutrition Support", "listed_stock_count": 600},
+    {"warehouse_id": "W1", "medicine_name": "Paracetamol", "listed_stock_count": 1500},
+    {"warehouse_id": "W1", "medicine_name": "Antibiotics", "listed_stock_count": 900},
+    {"warehouse_id": "W2", "medicine_name": "Malaria Treatment", "listed_stock_count": 620},
+    {"warehouse_id": "W2", "medicine_name": "Tuberculosis Treatment", "listed_stock_count": 260},
+    {"warehouse_id": "W2", "medicine_name": "Kwashiorkor Nutrition Support", "listed_stock_count": 550},
+    {"warehouse_id": "W2", "medicine_name": "Paracetamol", "listed_stock_count": 1100},
+    {"warehouse_id": "W2", "medicine_name": "Antibiotics", "listed_stock_count": 620},
+    {"warehouse_id": "W3", "medicine_name": "Malaria Treatment", "listed_stock_count": 470},
+    {"warehouse_id": "W3", "medicine_name": "Tuberculosis Treatment", "listed_stock_count": 240},
+    {"warehouse_id": "W3", "medicine_name": "Kwashiorkor Nutrition Support", "listed_stock_count": 420},
+    {"warehouse_id": "W3", "medicine_name": "Paracetamol", "listed_stock_count": 950},
+    {"warehouse_id": "W3", "medicine_name": "Antibiotics", "listed_stock_count": 780}
+  ]
+}

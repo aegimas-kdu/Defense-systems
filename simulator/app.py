@@ -1,17 +1,14 @@
 
-import math
-
+import pandas as pd
 import streamlit as st
 
 try:
-    from simulator.registry import get_agent_registry, get_tool_registry
+    from simulator.registry import get_agent_registry, get_tool_registry, QUESTIONS
     from simulator.participants.hospital import get_camp_registry
-    from simulator.participants.warehouse import get_warehouse_registry, get_distance_km, get_medicine_stock
     from simulator.agents.coordinator import AgentCoordinator
 except ModuleNotFoundError:  # pragma: no cover
-    from registry import get_agent_registry, get_tool_registry
+    from registry import get_agent_registry, get_tool_registry, QUESTIONS
     from participants.hospital import get_camp_registry
-    from participants.warehouse import get_warehouse_registry, get_distance_km, get_medicine_stock
     from agents.coordinator import AgentCoordinator
 
 
@@ -38,50 +35,6 @@ def get_tools():
 
 def get_agents():
     return get_agent_registry()
-
-
-def choose_warehouse_for_order(order):
-    medicine = order['medicine']
-    camp_name = order['camp_name']
-    quantity = order['quantity']
-    budget_limit = order.get('budget_limit', 5000)
-    medicine_name = medicine['name'] if isinstance(medicine, dict) else medicine
-
-    camp = next((item for item in get_camps() if item['name'].lower() == camp_name.lower()), None)
-    if camp is None:
-        return {"status": "rejected", "reason": "Clinic is not registered."}
-
-    candidates = []
-    for warehouse in get_warehouse_registry():
-        stock = get_medicine_stock(warehouse['warehouse_name'], medicine_name)
-        if stock is None or stock['quantity'] < quantity:
-            continue
-        distance_km = get_distance_km(camp['location'], warehouse['location'])
-        transport_cost = distance_km * warehouse['cost_per_km'] + warehouse['handling_fee']
-        if transport_cost > budget_limit:
-            continue
-        candidates.append({
-            'warehouse_name': warehouse['warehouse_name'],
-            'distance_km': round(distance_km, 2),
-            'transport_cost': round(transport_cost, 2),
-            'stock': stock['quantity'],
-        })
-
-    if not candidates:
-        return {"status": "rejected", "reason": "No warehouse has enough stock within budget."}
-
-    best = min(candidates, key=lambda item: (item['transport_cost'], item['distance_km']))
-    return {
-        'camp_name': camp_name,
-        'medicine_name': medicine_name,
-        'quantity': quantity,
-        'budget_limit': budget_limit,
-        'status': 'approved',
-        'warehouse_name': best['warehouse_name'],
-        'distance_km': best['distance_km'],
-        'transport_cost': best['transport_cost'],
-        'reason': 'Warehouse selected successfully.',
-    }
 
 
 st.set_page_config(
@@ -123,14 +76,13 @@ if submit:
 
     if result['warehouse']['decision'] == 'Approved' and result['transportation']['decision'] == 'Approved':
         delivery_hours = float(result['transportation']['delivery_time_hours'])
-        delivery_days = max(1, int(math.ceil(delivery_hours / 24)))
 
         st.markdown(
             f"""
             <div style="background: #f0fdf4; border-left: 8px solid #16a34a; border-radius: 14px; padding: 1.25rem; margin: 1rem 0 1.5rem;">
             <div style="font-size: 0.9rem; color: #166534; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Order approved</div>
             <div style="font-size: 2rem; color: #166534; font-weight: 700; margin-top: 0.3rem;">{medicine_name}</div>
-            <div style="font-size: 1.2rem; color: #14532d; margin-top: 0.35rem;">Expected delivery in {delivery_days} day{'s' if delivery_days != 1 else ''}</div>
+            <div style="font-size: 1.2rem; color: #14532d; margin-top: 0.35rem;">Expected delivery in {delivery_hours:.2f} hours</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -155,11 +107,22 @@ if submit:
 
         if result.get('agents'):
             st.markdown('### Agent readings')
-            for read in result.get('agents', []):
-                quantity = read.get('quantity') if read.get('quantity') is not None else 'n/a'
-                time_hours = read.get('time_hours') if read.get('time_hours') is not None else 'n/a'
-                cost = read.get('cost') if read.get('cost') is not None else 'n/a'
-                st.write(f"{read['agent_id']} ({read['domain']}) -> quantity={quantity}, time_hours={time_hours}, cost={cost}")
+            st.caption('All three agents of a domain answer the same question. Each claim shows the answer '
+                       '(primary tool) and both tool readings.')
+            rows = []
+            for c in result['agents']:
+                spec = QUESTIONS[c['question']]
+                primary, backup = c['readings']
+                rows.append({
+                    'Question': f"{c['question']} {spec['name']} ({spec['unit']})",
+                    'Key': ' / '.join(c['key']),
+                    'Agent': c['agent_id'],
+                    'Answer': c['answer'],
+                    'Primary tool': f"{primary['tool_id']} = {primary['value']}",
+                    'Backup tool': f"{backup['tool_id']} = {backup['value']}",
+                    'Routes agree': primary['value'] == backup['value'],
+                })
+            st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
         st.markdown('### Decision log')
         for log in result.get('logs', []):
