@@ -4,12 +4,14 @@ import itertools
 
 try:
     from simulator import registry
-    from simulator.defense import MajorityVoteDefense, NoConsensus
+    from simulator.defense import NoConsensus
+    from simulator.nodefense import NoDefense
     from simulator.participants.hospital import find_camp
     from simulator.world_ids import WAREHOUSE_IDS, VEHICLE_TYPES
 except ModuleNotFoundError:  # pragma: no cover
     import registry
-    from defense import MajorityVoteDefense, NoConsensus
+    from defense import NoConsensus
+    from nodefense import NoDefense
     from participants.hospital import find_camp
     from world_ids import WAREHOUSE_IDS, VEHICLE_TYPES
 
@@ -19,7 +21,7 @@ DEFAULT_NGO_BUDGET = 50000  # cost units, as in the system description
 class AgentCoordinator:
     def __init__(self, defense=None, world=None):
         self.world = world or registry.get_world()
-        self.defense = defense or MajorityVoteDefense()
+        self.defense = defense or NoDefense()
         self._mission_ids = itertools.count(1)
 
     def ask(self, question, key, inputs=None, mission_id=None):

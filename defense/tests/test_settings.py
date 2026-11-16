@@ -17,6 +17,7 @@ def test_defaults_are_right():
     assert settings.trust_fast_path == 0.90
     assert settings.slice_flag_after == 2
     assert settings.n_probation == 15
+    assert settings.event_at == 100
     assert settings.use_cascade_revision is True
     assert settings.use_fact_quarantine is True
     assert settings.use_fast_path is True

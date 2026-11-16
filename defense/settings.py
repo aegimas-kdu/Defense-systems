@@ -12,6 +12,7 @@ class Settings:
         self.trust_fast_path = 0.90
         self.slice_flag_after = 2
         self.n_probation = 15
+        self.event_at = 100
         self.use_cascade_revision = True
         self.use_fact_quarantine = True
         self.use_fast_path = True

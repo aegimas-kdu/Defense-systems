@@ -27,6 +27,20 @@ SCENARIOS = {
     'S2s': 'scattered poison',
     'S2a': 'aligned poison',
     'S3': 'a liar and scattered poison',
+    'S5': 'poison repaired',
+    'S6': 'liar reforms',
+    'S7': 'late attack',
+}
+
+SCENARIO_WINDOWS = {
+    'S0': {'poison_window': (0, None), 'liar_window': (0, None)},
+    'S1': {'poison_window': (0, None), 'liar_window': (0, None)},
+    'S2s': {'poison_window': (0, None), 'liar_window': (0, None)},
+    'S2a': {'poison_window': (0, None), 'liar_window': (0, None)},
+    'S3': {'poison_window': (0, None), 'liar_window': (0, None)},
+    'S5': {'poison_window': (0, None), 'liar_window': (0, None)},
+    'S6': {'poison_window': (0, None), 'liar_window': (0, None)},
+    'S7': {'poison_window': (0, None), 'liar_window': (0, None)},
 }
 
 
@@ -41,6 +55,12 @@ def scenario_runs(name):
     if name == 'S2a':
         return [('aligned', None)]
     if name == 'S3':
+        return [('scattered', agent) for agent in ALL_AGENTS]
+    if name == 'S5':
+        return [('scattered', None)]
+    if name == 'S6':
+        return [('none', agent) for agent in ALL_AGENTS]
+    if name == 'S7':
         return [('scattered', agent) for agent in ALL_AGENTS]
     raise ValueError(f'Unknown scenario: {name}')
 
@@ -101,7 +121,8 @@ def make_noise(seed, n_missions):
 
 
 class World:
-    def __init__(self, seed, poison_mode='none', liar=None, poison_tool='L1', settings=None):
+    def __init__(self, seed, poison_mode='none', liar=None, poison_tool='L1', settings=None,
+                 poison_window=(0, None), liar_window=(0, None)):
         if settings is None:
             settings = load_settings()
         if liar is not None and liar not in AGENT_TOOLS:
@@ -111,8 +132,16 @@ class World:
         self.poison_keys = pick_poison_keys(seed, poison_mode, self.settings.n_scattered_poison_keys)
         self.poison_tool = poison_tool
         self.liar = liar
+        self.poison_window = poison_window
+        self.liar_window = liar_window
         self.sequence = make_sequence(seed, self.settings.n_missions)
         self.noise = make_noise(seed, self.settings.n_missions)
+
+    def _in(self, window, m):
+        if m is None:
+            return True
+        start, end = window
+        return m >= start and (end is None or m < end)
 
     def true_value(self, qtype, key):
         # Both question types use the same hidden truth table in this toy world.
@@ -124,9 +153,9 @@ class World:
 
         # Each agent reads the two tools in its personal order; the per-read noise is fixed by seed.
         for tool, (slip_roll, slip_size, lie_offset) in zip(AGENT_TOOLS[agent], self.noise[(m, qtype, agent)]):
-            value = self.tool_value(tool, key, dres)
+            value = self.tool_value(tool, key, dres, m)
 
-            if agent == self.liar:
+            if agent == self.liar and self._in(self.liar_window, m):
                 value = truth + lie_offset
             elif slip_roll < self.settings.slip_rate / 2:
                 value += slip_size
@@ -148,7 +177,7 @@ class World:
             'inputs': inputs,
         }
 
-    def tool_value(self, tool, key, dres):
+    def tool_value(self, tool, key, dres, m=None):
         if tool in {'T1', 'T2'}:
             # Distance-derived tools need the resolved distance from the earlier decision.
             if dres is None:
@@ -157,6 +186,12 @@ class World:
         else:
             base = self.truth[key]
 
-        if tool == self.poison_tool and key in self.poison_keys:
+        if tool == self.poison_tool and key in self.poison_keys and self._in(self.poison_window, m):
             return poison_value(base)
         return base
+
+    def poison_live_at_end(self):
+        return self._in(self.poison_window, self.settings.n_missions - 1)
+
+    def liar_live_at_end(self):
+        return self._in(self.liar_window, self.settings.n_missions - 1)

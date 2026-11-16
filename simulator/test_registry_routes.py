@@ -124,3 +124,16 @@ def test_screenshot_case_is_now_consistent():
     for c in result['agents']:
         by_q.setdefault(c['question'], set()).add(c['answer'])
     assert all(len(v) == 1 for v in by_q.values()), by_q
+
+
+def test_nodefense_is_repeatable_and_picks_one_agents_answer():
+    from simulator.nodefense import NoDefense
+    key = {'warehouse': 'W2', 'hospital': 'C1', 'vehicle': 'Van'}
+    claims = [R.get_claim(a, 'Q2', key, mission_id=5) for a in AGENTS('Transportation')]
+    first = NoDefense(seed=1).decide('Q2', key, claims)
+    again = NoDefense(seed=1).decide('Q2', key, claims)
+    assert first == again == 120
+    liar = [dict(c) for c in claims]
+    liar[0]['answer'] = 9999
+    picks = {NoDefense(seed=s).decide('Q2', key, liar) for s in range(40)}
+    assert picks == {120, 9999}   # with no defense, a lying agent's answer can be chosen

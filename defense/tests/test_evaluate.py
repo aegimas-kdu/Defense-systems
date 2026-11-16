@@ -1,5 +1,15 @@
-from defense.defense import D4Base
-from defense.evaluate import make_ask, run_mission, run_world, summarize
+from defense.defense import D4Base, D4Plus
+from defense.baselines import MajorityVote, ReadingVote
+from defense.evaluate import (
+    HEADER,
+    format_row,
+    make_ask,
+    results_table,
+    run_mission,
+    run_world,
+    summarize,
+    write_table,
+)
 from defense.fake_claims import World, scenario_runs
 from defense.settings import load_settings
 
@@ -145,7 +155,7 @@ def test_d4base_liar_is_quarantined_in_at_least_90_percent_of_s1_runs():
     settings = load_settings()
     liar_hits = 0
     total = 0
-    for seed in range(5):
+    for seed in range(1, 6):
         for _, liar in scenario_runs('S1'):
             world = World(seed, poison_mode='none', liar=liar, settings=settings)
             defense = D4Base(settings=settings, seed=seed)
@@ -162,7 +172,7 @@ def test_d4base_has_no_false_alarms_in_clean_worlds():
     settings = load_settings()
     honest_agents_quarantined = 0
     clean_tools_quarantined = 0
-    for seed in range(20):
+    for seed in range(1, 21):
         world = World(seed, poison_mode='none', liar=None, settings=settings)
         defense = D4Base(settings=settings, seed=seed)
         result = run_world(world, defense)
@@ -177,7 +187,7 @@ def test_d4base_has_no_false_alarms_in_clean_worlds():
 def test_d4base_poison_only_runs_keep_honest_quarantine_counts_low():
     settings = load_settings()
     honest_agents_quarantined = 0
-    for seed in range(20):
+    for seed in range(1, 21):
         for poison_mode in ['scattered', 'aligned']:
             world = World(seed, poison_mode=poison_mode, liar=None, settings=settings)
             defense = D4Base(settings=settings, seed=seed)
@@ -192,7 +202,7 @@ def test_d4base_combined_runs_have_low_false_punishment_counts():
     settings = load_settings()
     honest_agents_quarantined = 0
     clean_tools_quarantined = 0
-    for seed in range(20):
+    for seed in range(1, 21):
         for _, liar in scenario_runs('S3'):
             world = World(seed, poison_mode='scattered', liar=liar, settings=settings)
             defense = D4Base(settings=settings, seed=seed)
@@ -203,3 +213,189 @@ def test_d4base_combined_runs_have_low_false_punishment_counts():
     print(f"S3 false punishments: honest={honest_agents_quarantined}, clean_tools={clean_tools_quarantined}")
     assert honest_agents_quarantined <= 20
     assert clean_tools_quarantined <= 20
+
+
+# ---------------------------------------------------------------------------
+# Results table and file writer (standard errors in the saved files)
+# ---------------------------------------------------------------------------
+
+def make_row(method='D1 answer vote', scenario='S0', liar='n/a'):
+    return {
+        'method': method,
+        'scenario': scenario,
+        'mission_success': {'mean': 0.9825, 'stderr': 0.0034},
+        'calls_per_mission': {'mean': 12.0, 'stderr': 0.0},
+        'honest_agents_quarantined': {'mean': 0.0, 'stderr': 0.0},
+        'clean_tools_quarantined': {'mean': 0.075, 'stderr': 0.024145},
+        'liar_quarantined': liar,
+    }
+
+
+def small_table(scenarios=('S0', 'S1'), seeds=(1, 2)):
+    factories = {
+        'D1 answer vote': lambda settings, seed: MajorityVote(settings=settings, seed=seed),
+        'D1b reading vote': lambda settings, seed: ReadingVote(settings=settings, seed=seed),
+    }
+    return results_table(factories, list(scenarios), list(seeds), load_settings())
+
+
+def test_header_names_every_metric_with_its_standard_error():
+    columns = HEADER.rstrip('\n').split('\t')
+
+    assert columns == [
+        'method', 'scenario',
+        'mission_success', 'mission_success_se',
+        'calls_per_mission', 'calls_per_mission_se',
+        'honest_agents_quarantined', 'honest_agents_quarantined_se',
+        'clean_tools_quarantined', 'clean_tools_quarantined_se',
+        'liar_quarantined',
+    ]
+    assert HEADER.endswith('\n')
+
+
+def test_format_row_matches_header_and_prints_six_decimals():
+    line = format_row(make_row(liar='120/120'))
+    fields = line.rstrip('\n').split('\t')
+
+    assert line.endswith('\n')
+    assert len(fields) == len(HEADER.rstrip('\n').split('\t'))
+    assert fields[:2] == ['D1 answer vote', 'S0']
+    assert fields[2:4] == ['0.982500', '0.003400']
+    assert fields[8:10] == ['0.075000', '0.024145']
+    assert fields[-1] == '120/120'
+
+
+def test_summarize_single_run_has_zero_standard_error():
+    summary = summarize([{'mission_success': 0.5, 'calls_per_mission': 12}])
+
+    assert summary['mission_success'] == {'mean': 0.5, 'stderr': 0.0}
+
+
+def test_results_table_rows_carry_mean_and_stderr_for_every_written_metric():
+    rows = small_table()
+
+    assert len(rows) == 2 * 2  # two scenarios times two methods
+    for row in rows:
+        for metric in ['mission_success', 'calls_per_mission', 'honest_agents_quarantined', 'clean_tools_quarantined']:
+            assert set(row[metric]) == {'mean', 'stderr'}
+            assert row[metric]['stderr'] >= 0.0
+
+
+def test_results_table_liar_label_counts_runs_with_a_liar():
+    rows = small_table(scenarios=('S0', 'S1'), seeds=(1, 2))
+
+    s0 = [row for row in rows if row['scenario'] == 'S0']
+    s1 = [row for row in rows if row['scenario'] == 'S1']
+    assert all(row['liar_quarantined'] == 'n/a' for row in s0)
+    # S1 has 6 liar positions per seed, so 2 seeds give 12 liar runs.
+    assert all(row['liar_quarantined'].endswith('/12') for row in s1)
+
+
+def test_write_final_report_includes_seed_and_commit_metadata(tmp_path):
+    from defense.evaluate import write_final_report
+
+    output_path = tmp_path / 'final.txt'
+    write_final_report(
+        seeds=(101, 102),
+        output_path=output_path,
+        settings=load_settings(),
+        git_commit='abc1234',
+    )
+
+    text = output_path.read_text(encoding='utf-8')
+    assert '# defaults-frozen' in text
+    assert '# seeds: 101-102' in text
+    assert '# git: abc1234' in text
+    assert 'method\tscenario' in text
+
+
+def test_write_table_writes_header_rows_and_no_notes_when_missing(tmp_path):
+    path = tmp_path / 'table.txt'
+    rows = [make_row('D1 answer vote', 'S0'), make_row('D1b reading vote', 'S0')]
+
+    write_table(rows, path, tmp_path / 'missing_notes.txt')
+
+    lines = path.read_text(encoding='utf-8').splitlines()
+    assert lines[0] == HEADER.rstrip('\n')
+    assert len(lines) == 1 + len(rows)
+    assert lines[1].startswith('D1 answer vote\tS0\t')
+
+
+def test_write_table_without_a_notes_path_writes_only_the_table(tmp_path):
+    path = tmp_path / 'table.txt'
+
+    write_table([make_row()], path)
+
+    assert len(path.read_text(encoding='utf-8').splitlines()) == 2
+
+
+def test_write_table_appends_existing_notes_after_a_blank_line(tmp_path):
+    path = tmp_path / 'table.txt'
+    notes = tmp_path / 'notes.txt'
+    notes.write_text('My hand-written commentary.\n', encoding='utf-8')
+
+    write_table([make_row()], path, notes)
+
+    lines = path.read_text(encoding='utf-8').splitlines()
+    assert lines[2] == ''
+    assert lines[3] == 'My hand-written commentary.'
+    # the notes file itself is never modified
+    assert notes.read_text(encoding='utf-8') == 'My hand-written commentary.\n'
+
+
+def test_saved_table_can_be_read_back_with_the_same_means(tmp_path):
+    rows = small_table()
+    path = tmp_path / 'round_trip.txt'
+
+    write_table(rows, path)
+
+    lines = path.read_text(encoding='utf-8').splitlines()
+    columns = lines[0].split('\t')
+    parsed = [dict(zip(columns, line.split('\t'))) for line in lines[1:]]
+    assert len(parsed) == len(rows)
+    for row, record in zip(rows, parsed):
+        assert record['method'] == row['method']
+        assert record['scenario'] == row['scenario']
+        assert float(record['mission_success']) == round(row['mission_success']['mean'], 6)
+        assert float(record['mission_success_se']) == round(row['mission_success']['stderr'], 6)
+        assert record['liar_quarantined'] == row['liar_quarantined']
+
+
+def test_d4plus_all_off_matches_d4base_equivalence():
+    settings = load_settings()
+    for seed in range(1, 6):
+        for _, liar in scenario_runs('S3'):
+            world_base = World(seed, poison_mode='scattered', liar=liar, settings=settings)
+            world_all_off = World(seed, poison_mode='scattered', liar=liar, settings=settings)
+            base = D4Base(settings=settings, seed=seed)
+            all_off = D4Plus(
+                settings=load_settings(
+                    use_cascade_revision=False,
+                    use_fact_quarantine=False,
+                    use_fast_path=False,
+                ),
+                seed=seed,
+            )
+            base_result = run_world(world_base, base)
+            all_off_result = run_world(world_all_off, all_off)
+            assert base_result == all_off_result
+
+
+def test_d4plus_all_off_matches_d4base_equivalence():
+    settings = load_settings()
+    for seed in range(1, 6):
+        for _, liar in scenario_runs('S3'):
+            world_base = World(seed, poison_mode='scattered', liar=liar, settings=settings)
+            world_all_off = World(seed, poison_mode='scattered', liar=liar, settings=settings)
+            base = D4Base(settings=settings, seed=seed)
+            all_off = D4Plus(
+                settings=load_settings(
+                    use_cascade_revision=False,
+                    use_fact_quarantine=False,
+                    use_fast_path=False,
+                ),
+                seed=seed,
+            )
+            base_result = run_world(world_base, base)
+            all_off_result = run_world(world_all_off, all_off)
+            assert base_result == all_off_result
